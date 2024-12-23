@@ -11,7 +11,7 @@ import (
 )
 
 
-func CreateUser(c *gin.Context) {
+func Register(c *gin.Context) {
 	var registerInput requests.RegisterInput
 	if err := c.ShouldBindJSON(&registerInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

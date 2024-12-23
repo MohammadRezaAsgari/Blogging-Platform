@@ -18,5 +18,5 @@ func SetupRoutes(server *gin.Engine, cfg config.Config) {
 		})
 	})
 
-	server.POST("/register", handlers.CreateUser)
+	server.POST("/register", handlers.Register)
 }
