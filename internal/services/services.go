@@ -18,3 +18,14 @@ func InitDB(databaseURL string) error {
 	db.AutoMigrate(&models.User{})
 	return nil
 }
+
+func GetUserByUsername(username string)(models.User, error) {
+	var user models.User
+	result := db.Where("username = ?", username).First(&user)
+	return user, result.Error
+}
+
+func CreateUser(user models.User)error{
+	result := db.Create(&user)
+	return result.Error
+}

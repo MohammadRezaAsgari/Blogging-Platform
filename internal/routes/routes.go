@@ -2,6 +2,7 @@ package routes
 
 import (
 	"blog-plat/config"
+	"blog-plat/internal/handlers"
 	"blog-plat/internal/services"
 	"net/http"
 
@@ -16,4 +17,6 @@ func SetupRoutes(server *gin.Engine, cfg config.Config) {
 			"details":"OK!",
 		})
 	})
+
+	server.POST("/register", handlers.CreateUser)
 }
