@@ -2,7 +2,8 @@ package routes
 
 import (
 	"blog-plat/config"
-	"blog-plat/internal/handlers"
+	v1 "blog-plat/internal/api/v1"
+	"blog-plat/internal/middlewares"
 	"blog-plat/internal/services"
 	"net/http"
 
@@ -18,5 +19,8 @@ func SetupRoutes(server *gin.Engine, cfg config.Config) {
 		})
 	})
 
-	server.POST("/register", handlers.Register)
+	// Auth app
+	server.POST("/api/v1/auth/login", v1.Login)
+	server.POST("/api/v1/auth/register", v1.Register)
+	server.GET("/api/v1/auth/me", middlewares.AuthRequired(), v1.GetUserProfile)
 }
