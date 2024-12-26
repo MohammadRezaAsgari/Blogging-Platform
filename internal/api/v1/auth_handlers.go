@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"blog-plat/internal/api/v1/requests"
+	"blog-plat/internal/api/v1/schemas"
 	"blog-plat/internal/models"
 	"blog-plat/internal/services"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 )
 
 func Login(c *gin.Context) {
-	var loginInput requests.LoginRegisterInput
+	var loginInput schemas.LoginRegisterInput
 	if err := c.ShouldBindJSON(&loginInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -29,7 +29,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-
 	token, err := services.GenerateToken(userFound)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to generate token"})
@@ -40,9 +39,8 @@ func Login(c *gin.Context) {
 	})
 }
 
-
 func Register(c *gin.Context) {
-	var registerInput requests.LoginRegisterInput
+	var registerInput schemas.LoginRegisterInput
 	if err := c.ShouldBindJSON(&registerInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -66,12 +64,14 @@ func Register(c *gin.Context) {
 		Password: string(passwordHash),
 	}
 
-	
-	if err := services.CreateUser(user); err != nil {
+	userObj, err := services.CreateUser(user)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusNoContent, gin.H{})
+	c.JSON(http.StatusCreated, gin.H{
+		"data": userObj,
+	})
 
 }
 
